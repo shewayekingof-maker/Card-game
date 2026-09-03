@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shewaye &middot; ብላክጃክ</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  :root{
+    --felt-1: #0f3d2e;
+    --felt-2: #0a2b21;
+    --gold: #c9a227;
+    --gold-bright: #e6c65c;
+    --cream: #faf6ec;
+    --ink: #17231d;
+    --red: #a5301f;
+    --line: rgba(201,162,39,0.35);
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 50% -10%, #164a37 0%, var(--felt-1) 45%, var(--felt-2) 100%);
+    font-family:'Space Grotesk', sans-serif;
+    color: var(--cream);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding: 28px 16px 40px;
+  }
+
+  .table-frame{
+    width:100%;
+    max-width:460px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 22px 18px 26px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.15));
+    box-shadow: 0 30px 60px rgba(0,0,0,0.45), inset 0 0 60px rgba(0,0,0,0.25);
+  }
+
+  header{
+    text-align:center;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 2.6rem;
+    margin: 0 0 2px;
+    color: var(--gold-bright);
+    letter-spacing: 0.5px;
+  }
+
+  .subtitle{
+    font-size: 0.8rem;
+    color: rgba(250,246,236,0.55);
+    letter-spacing: 0.3px;
+  }
+
+  .scoreboard{
+    display:flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: rgba(250,246,236,0.75);
+    margin-top: 10px;
+  }
+  .scoreboard b{ color: var(--gold-bright); font-weight:600; }
+
+  .zone{ margin: 18px 0; }
+  .zone-label{
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 0.78rem;
+    color: rgba(250,246,236,0.6);
+    margin-bottom: 8px;
+  }
+  .zone-total{
+    font-family:'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight:600;
+    color: var(--gold-bright);
+  }
+
+  .cards{
+    display:flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    min-height: 96px;
+    align-items:center;
+  }
+
+  .card{
+    width: 62px;
+    height: 88px;
+    border-radius: 8px;
+    background: var(--cream);
+    color: var(--ink);
+    display:flex;
+    flex-direction:column;
+    justify-content: space-between;
+    padding: 6px 7px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+    animation: deal 0.35s ease;
+    flex-shrink:0;
+  }
+  .card.red{ color: var(--red); }
+  .card .rank{ font-size: 1.05rem; line-height:1; }
+  .card .suit{ font-size: 1.4rem; align-self:center; }
+  .card .rank.bottom{ align-self:flex-end; transform: rotate(180deg); }
+
+  .card.back{
+    background: repeating-linear-gradient(135deg, #7a1f1f, #7a1f1f 6px, #5c1414 6px, #5c1414 12px);
+    border: 2px solid var(--gold);
+  }
+
+  @keyframes deal{
+    from{ transform: translateY(-16px) scale(0.9); opacity:0; }
+    to{ transform: translateY(0) scale(1); opacity:1; }
+  }
+
+  .message{
+    text-align:center;
+    min-height: 30px;
+    font-family:'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight:600;
+    margin: 6px 0 14px;
+    color: var(--gold-bright);
+  }
+
+  .controls{
+    display:flex;
+    gap: 10px;
+    justify-content:center;
+    flex-wrap: wrap;
+  }
+
+  button{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    padding: 11px 20px;
+    border-radius: 999px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold-bright);
+    cursor:pointer;
+    transition: background 0.15s, color 0.15s, transform 0.1s;
+  }
+  button:hover:not(:disabled){
+    background: var(--gold);
+    color: var(--felt-2);
+  }
+  button:active:not(:disabled){ transform: scale(0.97); }
+  button:disabled{ opacity: 0.3; cursor: default; }
+
+  button.primary{
+    background: var(--gold);
+    color: var(--felt-2);
+  }
+  button.primary:hover{ background: var(--gold-bright); }
+
+  footer{
+    text-align:center;
+    font-size: 0.72rem;
+    color: rgba(250,246,236,0.4);
+    margin-top: 22px;
+  }
+</style>
+</head>
+<body>
+
+<div class="table-frame">
+  <header>
+    <h1>Shewaye</h1>
+    <div class="subtitle">ብላክጃክ &middot; 21 ደርሰህ ዲለሩን አሸንፍ</div>
+    <div class="scoreboard">
+      <span>ድል፦ <b id="winCount">0</b></span>
+      <span>ሽንፈት፦ <b id="loseCount">0</b></span>
+      <span>እኩል፦ <b id="pushCount">0</b></span>
+    </div>
+  </header>
+
+  <div class="zone">
+    <div class="zone-label">
+      <span>ዲለር</span>
+      <span class="zone-total" id="dealerTotal">–</span>
+    </div>
+    <div class="cards" id="dealerCards"></div>
+  </div>
+
+  <div class="message" id="message">ለመጀመር "ጀምር" ተጫን</div>
+
+  <div class="zone">
+    <div class="zone-label">
+      <span>እርስዎ</span>
+      <span class="zone-total" id="playerTotal">–</span>
+    </div>
+    <div class="cards" id="playerCards"></div>
+  </div>
+
+  <div class="controls">
+    <button class="primary" id="btnDeal">ጀምር</button>
+    <button id="btnHit" disabled>ካርድ ውሰድ</button>
+    <button id="btnStand" disabled>ቁም</button>
+  </div>
+</div>
+
+<footer>ነጠላ 52-ካርድ ደርድር &middot; ዲለር በ17 እና ከዚያ በላይ ይቆማል</footer>
+
+<script>
+  const SUITS = [
+    { sym: '♠', red: false },
+    { sym: '♥', red: true },
+    { sym: '♦', red: true },
+    { sym: '♣', red: false }
+  ];
+  const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+
+  let deck = [];
+  let playerHand = [];
+  let dealerHand = [];
+  let roundOver = true;
+  let wins = 0, losses = 0, pushes = 0;
+
+  const dealerCardsEl = document.getElementById('dealerCards');
+  const playerCardsEl = document.getElementById('playerCards');
+  const dealerTotalEl = document.getElementById('dealerTotal');
+  const playerTotalEl = document.getElementById('playerTotal');
+  const messageEl = document.getElementById('message');
+  const btnDeal = document.getElementById('btnDeal');
+  const btnHit = document.getElementById('btnHit');
+  const btnStand = document.getElementById('btnStand');
+  const winCountEl = document.getElementById('winCount');
+  const loseCountEl = document.getElementById('loseCount');
+  const pushCountEl = document.getElementById('pushCount');
+
+  function buildDeck(){
+    const d = [];
+    for(const suit of SUITS){
+      for(const rank of RANKS){
+        d.push({ rank, suit });
+      }
+    }
+    for(let i = d.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [d[i], d[j]] = [d[j], d[i]];
+    }
+    return d;
+  }
+
+  function cardValue(card){
+    if(card.rank === 'A') return 11;
+    if(['J','Q','K'].includes(card.rank)) return 10;
+    return parseInt(card.rank, 10);
+  }
+
+  function handTotal(hand){
+    let total = hand.reduce((sum, c) => sum + cardValue(c), 0);
+    let aces = hand.filter(c => c.rank === 'A').length;
+    while(total > 21 && aces > 0){
+      total -= 10;
+      aces--;
+    }
+    return total;
+  }
+
+  function renderCard(card, hidden){
+    const div = document.createElement('div');
+    if(hidden){
+      div.className = 'card back';
+      return div;
+    }
+    div.className = 'card' + (card.suit.red ? ' red' : '');
+    div.innerHTML = `
+      <div class="rank">${card.rank}</div>
+      <div class="suit">${card.suit.sym}</div>
+      <div class="rank bottom">${card.rank}</div>
+    `;
+    return div;
+  }
+
+  function renderHands(hideDealerHole){
+    dealerCardsEl.innerHTML = '';
+    dealerHand.forEach((card, idx) => {
+      const hidden = hideDealerHole && idx === 1;
+      dealerCardsEl.appendChild(renderCard(card, hidden));
+    });
+
+    playerCardsEl.innerHTML = '';
+    playerHand.forEach(card => playerCardsEl.appendChild(renderCard(card, false)));
+
+    playerTotalEl.textContent = handTotal(playerHand);
+    dealerTotalEl.textContent = hideDealerHole ? '?' : handTotal(dealerHand);
+  }
+
+  function updateScoreboard(){
+    winCountEl.textContent = wins;
+    loseCountEl.textContent = losses;
+    pushCountEl.textContent = pushes;
+  }
+
+  function startRound(){
+    deck = buildDeck();
+    playerHand = [deck.pop(), deck.pop()];
+    dealerHand = [deck.pop(), deck.pop()];
+    roundOver = false;
+
+    renderHands(true);
+    messageEl.textContent = 'ካርድ ውሰድ ወይም ቁም';
+    btnDeal.disabled = true;
+    btnHit.disabled = false;
+    btnStand.disabled = false;
+
+    if(handTotal(playerHand) === 21){
+      finishRound();
+    }
+  }
+
+  function playerHit(){
+    if(roundOver) return;
+    playerHand.push(deck.pop());
+    renderHands(true);
+    if(handTotal(playerHand) > 21){
+      finishRound();
+    }
+  }
+
+  function playerStand(){
+    if(roundOver) return;
+    finishRound();
+  }
+
+  function finishRound(){
+    roundOver = true;
+    btnHit.disabled = true;
+    btnStand.disabled = true;
+    btnDeal.disabled = false;
+
+    const playerTotal = handTotal(playerHand);
+
+    if(playerTotal > 21){
+      renderHands(true);
+      messageEl.textContent = 'ከ21 አለፍክ — ተሸነፍክ';
+      losses++;
+      updateScoreboard();
+      return;
+    }
+
+    while(handTotal(dealerHand) < 17){
+      dealerHand.push(deck.pop());
+    }
+
+    renderHands(false);
+    const dealerTotal = handTotal(dealerHand);
+
+    if(dealerTotal > 21){
+      messageEl.textContent = 'ዲለር ከ21 አለፈ — አሸነፍክ!';
+      wins++;
+    } else if(playerTotal > dealerTotal){
+      messageEl.textContent = 'አሸነፍክ! 🎉';
+      wins++;
+    } else if(playerTotal < dealerTotal){
+      messageEl.textContent = 'ዲለር አሸነፈ — ተሸነፍክ';
+      losses++;
+    } else {
+      messageEl.textContent = 'እኩል ወጣ — Push';
+      pushes++;
+    }
+    updateScoreboard();
+  }
+
+  btnDeal.addEventListener('click', startRound);
+  btnHit.addEventListener('click', playerHit);
+  btnStand.addEventListener('click', playerStand);
+</script>
+
+</body>
+</html>
