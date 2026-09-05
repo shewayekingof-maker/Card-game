@@ -75,6 +75,59 @@
   }
   .scoreboard b{ color: var(--gold-bright); font-weight:600; }
 
+  .promo-banner{
+    margin-top: 12px;
+    padding: 8px 10px;
+    border: 1px dashed var(--gold);
+    border-radius: 10px;
+    font-size: 0.72rem;
+    line-height: 1.4;
+    color: rgba(250,246,236,0.8);
+    background: rgba(201,162,39,0.08);
+  }
+  .promo-banner a{
+    color: var(--gold-bright);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .prize-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 50;
+  }
+  .prize-overlay.show{ display:flex; }
+  .prize-box{
+    background: linear-gradient(180deg, #164a37, var(--felt-2));
+    border: 1px solid var(--gold);
+    border-radius: 16px;
+    padding: 26px 22px;
+    max-width: 380px;
+    text-align:center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  }
+  .prize-box h2{
+    font-family:'Cormorant Garamond', serif;
+    color: var(--gold-bright);
+    font-size: 1.6rem;
+    margin: 0 0 10px;
+  }
+  .prize-box p{
+    font-size: 0.9rem;
+    color: rgba(250,246,236,0.85);
+    line-height: 1.5;
+    margin: 0 0 16px;
+  }
+  .prize-box a{
+    color: var(--gold-bright);
+    font-weight: 700;
+  }
+
   .zone{ margin: 18px 0; }
   .zone-label{
     display:flex;
@@ -200,7 +253,7 @@
   <ins class="adsbygoogle"
        style="display:block; width:100%;"
        data-ad-client="ca-pub-6051606880648216"
-       data-ad-slot="1111111111"
+       data-ad-slot="5422418840"
        data-ad-format="auto"
        data-full-width-responsive="true"></ins>
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
@@ -214,6 +267,11 @@
       <span>ድል፦ <b id="winCount">0</b></span>
       <span>ሽንፈት፦ <b id="loseCount">0</b></span>
       <span>እኩል፦ <b id="pushCount">0</b></span>
+    </div>
+    <div class="promo-banner">
+      🏆 ከ100 ጨዋታ 90 ካሸነፉ ሽልማት ያገኛሉ! የስክሪንሾት ውጤትዎን በቴሌግራም ወደ
+      <a href="https://t.me/Yoas3693" target="_blank" rel="noopener">@Yoas3693</a>
+      ይላኩ።
     </div>
   </header>
 
@@ -242,11 +300,23 @@
   </div>
 </div>
 
+<div class="prize-overlay" id="prizeOverlay">
+  <div class="prize-box">
+    <h2>🏆 እንኳን ደስ አሎት!</h2>
+    <p>
+      ከ100 ጨዋታ 90 አሸንፈዋል! ሽልማት ለማግኘት የውጤት ስክሪንሾትዎን
+      በቴሌግራም ወደ <a href="https://t.me/Yoas3693" target="_blank" rel="noopener">@Yoas3693</a>
+      ይላኩ።
+    </p>
+    <button class="primary" id="btnClosePrize">ዝጋ</button>
+  </div>
+</div>
+
 <div class="ad-slot bottom">
   <ins class="adsbygoogle"
        style="display:block; width:100%;"
        data-ad-client="ca-pub-6051606880648216"
-       data-ad-slot="2222222222"
+       data-ad-slot="1483173832"
        data-ad-format="auto"
        data-full-width-responsive="true"></ins>
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
@@ -268,6 +338,12 @@
   let dealerHand = [];
   let roundOver = true;
   let wins = 0, losses = 0, pushes = 0;
+  let prizeClaimed = false;
+  const PRIZE_GOAL_GAMES = 100;
+  const PRIZE_GOAL_WINS = 90;
+
+  const prizeOverlay = document.getElementById('prizeOverlay');
+  const btnClosePrize = document.getElementById('btnClosePrize');
 
   const dealerCardsEl = document.getElementById('dealerCards');
   const playerCardsEl = document.getElementById('playerCards');
@@ -344,6 +420,15 @@
     winCountEl.textContent = wins;
     loseCountEl.textContent = losses;
     pushCountEl.textContent = pushes;
+    checkPrizeEligibility();
+  }
+
+  function checkPrizeEligibility(){
+    const totalGames = wins + losses + pushes;
+    if(!prizeClaimed && totalGames >= PRIZE_GOAL_GAMES && wins >= PRIZE_GOAL_WINS){
+      prizeClaimed = true;
+      prizeOverlay.classList.add('show');
+    }
   }
 
   function startRound(){
@@ -419,6 +504,7 @@
   btnDeal.addEventListener('click', startRound);
   btnHit.addEventListener('click', playerHit);
   btnStand.addEventListener('click', playerStand);
+  btnClosePrize.addEventListener('click', () => prizeOverlay.classList.remove('show'));
 </script>
 
 </body>
